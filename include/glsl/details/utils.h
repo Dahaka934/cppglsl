@@ -110,4 +110,27 @@ constexpr size_t vector_size_for() {
 
 } // namespace traits
 
+namespace details {
+
+template<size_t Begin, size_t End, class Action>
+requires (std::invocable<Action, size_t> || std::invocable<Action, void>)
+constexpr void static_foreach(const Action& action) {
+    constexpr size_t Step = Begin <= End ? 1 : -1;
+    if constexpr (Begin != End) {
+        if constexpr (std::invocable<Action, size_t>) {
+            action(Begin);
+        } else {
+            action();
+        }
+        static_foreach<Begin + Step, End>(action);
+    }
+}
+
+template<class T, class Func>
+constexpr void vector_foreach(const Func& func) {
+    details::static_foreach<0, traits::vector_trait<T>::size>(func);
+}
+
+} // namespace details
+
 } // namespace glsl
