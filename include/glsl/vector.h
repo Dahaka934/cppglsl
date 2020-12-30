@@ -97,6 +97,125 @@ public: // OPERATORS
         return data[i];
     }
 
+    Vector& operator=(const Vector&) = default;
+
+    Vector& operator=(Vector&&) noexcept = default;
+
+    template<class T> requires(concepts::SuitedTypeFor<std::remove_reference_t<T>, Vector>)
+    constexpr Vector& operator=(T&& v) {
+        foreachWith(v, [&](auto&& v1, auto&& v2) {
+            v1 = v2;
+        });
+        return *this;
+    }
+
+    template<concepts::SuitedTypeFor<Vector> T>
+    constexpr Vector& operator+=(const T& v) {
+        foreachWith(v, [&](auto&& v1, auto&& v2) {
+            v1 += v2;
+        });
+        return *this;
+    }
+
+    template<concepts::SuitedTypeFor<Vector> T>
+    constexpr Vector& operator-=(const T& v) {
+        foreachWith(v, [&](auto&& v1, auto&& v2) {
+            v1 -= v2;
+        });
+        return *this;
+    }
+
+    template<concepts::SuitedTypeFor<Vector> T>
+    constexpr Vector& operator*=(const T& v) {
+        foreachWith(v, [&](auto&& v1, auto&& v2) {
+            v1 *= v2;
+        });
+        return *this;
+    }
+
+    template<concepts::SuitedTypeFor<Vector> T>
+    constexpr Vector& operator/=(const T& v) {
+        foreachWith(v, [&](auto&& v1, auto&& v2) {
+            v1 /= v2;
+        });
+        return *this;
+    }
+
+    constexpr Vector operator+() {
+        return *this;
+    }
+
+    constexpr Vector operator-() {
+        return Vector(0) -= *this;
+    }
+
+    constexpr Vector& operator++() {
+        return operator+=(1);
+    }
+
+    constexpr Vector& operator--() {
+        return operator-=(1);
+    }
+
+    constexpr Vector operator++(int) & {
+        Vector result(*this);
+        operator++();
+        return result;
+    }
+
+    constexpr Vector operator--(int) & {
+        Vector result(*this);
+        operator--();
+        return result;
+    }
+
+    template<concepts::SuitedTypeFor<Vector> T>
+    constexpr bool operator==(const T& v) const {
+        bool equals = true;
+        foreachWith(v, [&](const auto& v1, const auto& v2) {
+            equals &= v1 == v2;
+        });
+        return equals;
+    }
+
+    template<concepts::SuitedTypeFor<Vector> T>
+    constexpr bool operator!=(const T& v) const {
+        return !operator==(v);
+    }
+
+    constexpr auto operator!() const {
+        Vector<bool, VectorSize, Trait> result;
+        result.foreachWith(*this, [&](auto&& v1, auto&& v2) {
+            v1 = !v2;
+        });
+        return result;
+    }
+
+    template<concepts::SuitedTypeFor<Vector> T>
+    friend constexpr Vector operator+(const Vector& v1, const T& v2) {
+        return traits::vector_common_t<Vector, T>(v1) += v2;
+    }
+
+    template<concepts::SuitedTypeFor<Vector> T>
+    friend constexpr Vector operator-(const Vector& v1, const T& v2) {
+        return traits::vector_common_t<Vector, T>(v1) -= v2;
+    }
+
+    template<concepts::SuitedTypeFor<Vector> T>
+    friend constexpr Vector operator*(const Vector& v1, const T& v2) {
+        return traits::vector_common_t<Vector, T>(v1) *= v2;
+    }
+
+    template<concepts::SuitedTypeFor<Vector> T>
+    friend constexpr Vector operator/(const Vector& v1, const T& v2) {
+        return traits::vector_common_t<Vector, T>(v1) /= v2;
+    }
+
+    constexpr operator ScalarType() const
+    requires (VectorSize == 1) {
+        return at(0);
+    }
+
 public: // STL COMPATIBILITY
 
     ScalarRef at(size_t i) { return data.at(i); }

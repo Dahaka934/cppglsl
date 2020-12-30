@@ -116,6 +116,9 @@ constexpr bool vector_equals() {
     return vector_trait<T1>::space == vector_trait<T2>::space && vector_trait<T1>::size == vector_trait<T2>::size;
 }
 
+template<class T1, class T2>
+using vector_common_t = std::conditional_t<(vector_trait<T1>::space >= vector_trait<T2>::space), T1, T2>;
+
 } // namespace traits
 
 namespace concepts {
