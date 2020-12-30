@@ -10,10 +10,11 @@ struct VectorProxy {
     static constexpr size_t VectorSize = sizeof...(Indices);
     using VectorItem = typename Trait::ScalarType;
 
-    using Vector = typename Trait::template Factory<VectorItem, VectorSize>;
-    using Data = typename Trait::DataType;
+    template<class Scalar_, size_t Size_>
+    using VectorFactory = typename Trait::template Factory<Scalar_, Size_>;
 
-    static_assert(concepts::Vector<Vector>);
+    using Vector = VectorFactory<VectorItem, VectorSize>;
+    using Data = typename Trait::DataType;
 
     constexpr operator Vector() const {
         return decay();

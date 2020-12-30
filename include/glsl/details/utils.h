@@ -63,6 +63,9 @@ concept MatrixQuadN = requires {
     requires T::MatrixColumns == N;
 };
 
+template<typename T>
+concept Scalar = std::is_scalar_v<T>;
+
 } // namespace concepts
 
 namespace traits {
@@ -108,7 +111,25 @@ constexpr size_t vector_size_for() {
     return vector_trait<T>::space >= vector_trait<V>::space ? vector_trait<T>::size : 1;
 }
 
+template<class T1, class T2>
+constexpr bool vector_equals() {
+    return vector_trait<T1>::space == vector_trait<T2>::space && vector_trait<T1>::size == vector_trait<T2>::size;
+}
+
 } // namespace traits
+
+namespace concepts {
+
+template<typename T, typename V>
+concept SuitedScalarFor = std::convertible_to<T, typename V::VectorItem>;
+
+template<typename T, typename V>
+concept SuitedVectorFor = Vector<T> && SuitedScalarFor<typename T::VectorItem, V> && traits::vector_equals<T, V>();
+
+template<typename T, typename V>
+concept SuitedTypeFor = SuitedScalarFor<T, V> || SuitedVectorFor<T, V>;
+
+} // namespace concepts
 
 namespace details {
 
