@@ -40,4 +40,14 @@ requires requires { result != expected; } {
     }
 }
 
+using vec2x2 = glsl::Vector<vec2, 2>;
+using vec2x3 = glsl::Vector<vec3, 2>;
+using vec2x4 = glsl::Vector<vec4, 2>;
+using vec3x2 = glsl::Vector<vec2, 3>;
+using vec3x3 = glsl::Vector<vec3, 3>;
+using vec3x4 = glsl::Vector<vec4, 3>;
+using vec4x2 = glsl::Vector<vec2, 4>;
+using vec4x3 = glsl::Vector<vec3, 4>;
+using vec4x4 = glsl::Vector<vec4, 4>;
+
 } // namespace glsl::test
