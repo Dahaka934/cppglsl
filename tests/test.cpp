@@ -59,8 +59,33 @@ void test_vector_default() {
     }, 6);
 }
 
+void test_vector_functions() {
+    CHECK(cos(0.0), 1.0);
+    CHECK(cos(pi), -1.0);
+    CHECK(cos(vec2(pi, pi*2)), vec2(-1.0, 1.0));
+    CHECK(cos(vec4x2(vec2(pi, pi*2))), vec2(-1.0, 1.0));
+    CHECK(radians(degrees(pi)), pi);
+    CHECK(degrees(radians(vec3(1, 2, 3))), vec3(1, 2, 3));
+
+    CHECK(abs(vec2(-1, 1)), vec2(1, 1));
+    CHECK(isinf(vec2(1)), bvec2(0, 0));
+
+    CHECK(max(vec2(1, 2), vec2(3, 0)), vec2(3, 2));
+    CHECK(clamp(vec3(0, 5, 9), vec3(3), vec3(6)), vec3(3, 5, 6));
+    CHECK(mix(vec2(0), vec2(5), bvec2(1, 0)), vec2(5, 0));
+    CHECK(mix(vec2(0), vec2(4), vec2(0.5, 2)), vec2(2, 8));
+    CHECK(sign(vec3(-100, 0, 100)), ivec3(-1, 0, 1));
+
+    CHECK(dot(5, 10), 50);
+    CHECK(dot(ivec2(5), ivec2(10)), 100);
+
+    CHECK(length(-5), 5);
+    CHECK(length(ivec2(3, 4).xy), 5);
+}
+
 int main() {
     test_vector_default();
+    test_vector_functions();
 
     return glsl::test::has_error ? 1 : 0;
 }

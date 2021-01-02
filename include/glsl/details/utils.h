@@ -119,6 +119,17 @@ constexpr bool vector_equals() {
 template<class T1, class T2>
 using vector_common_t = std::conditional_t<(vector_trait<T1>::space >= vector_trait<T2>::space), T1, T2>;
 
+template<class T>
+using vector_item_t = typename vector_trait<T>::item;
+
+template<class T, class Scalar = vector_item_t<T>, size_t Size = vector_trait<T>::size>
+using vector_of_t = typename vector_trait<T>::template factory<Scalar, Size>;
+
+template <class T1, class ...T>
+struct first {
+    using type = T1;
+};
+
 } // namespace traits
 
 namespace concepts {
@@ -153,6 +164,20 @@ constexpr void static_foreach(const Action& action) {
 template<class T, class Func>
 constexpr void vector_foreach(const Func& func) {
     details::static_foreach<0, traits::vector_trait<T>::size>(func);
+}
+
+template<class Func, class... Args>
+constexpr auto apply(const Func& func, Args... args) {
+    using First = typename traits::first<Args...>::type;
+    using Scalar = decltype(func(args[0]...));
+
+    traits::vector_of_t<First, Scalar, traits::vector_trait<First>::size> out{};
+
+    vector_foreach<First>([&](size_t index) {
+        out[index] = func(args[index]...);
+    });
+
+    return out;
 }
 
 } // namespace details

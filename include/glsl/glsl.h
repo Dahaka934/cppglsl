@@ -17,6 +17,7 @@
 #endif
 
 #include "vector.h"
+#include "vector_functions.h"
 
 namespace glsl {
 
