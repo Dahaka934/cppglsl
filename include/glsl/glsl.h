@@ -18,6 +18,7 @@
 
 #include "vector.h"
 #include "vector_functions.h"
+#include "matrix.h"
 
 namespace glsl {
 
@@ -32,5 +33,19 @@ using ivec4 = glsl::Vector<int, 4>;
 using vec2 = glsl::Vector<float, 2>;
 using vec3 = glsl::Vector<float, 3>;
 using vec4 = glsl::Vector<float, 4>;
+
+using mat2x2 = glsl::Matrix<float, 2, 2>;
+using mat2x3 = glsl::Matrix<float, 2, 3>;
+using mat2x4 = glsl::Matrix<float, 2, 4>;
+using mat3x2 = glsl::Matrix<float, 3, 2>;
+using mat3x3 = glsl::Matrix<float, 3, 3>;
+using mat3x4 = glsl::Matrix<float, 3, 4>;
+using mat4x2 = glsl::Matrix<float, 4, 2>;
+using mat4x3 = glsl::Matrix<float, 4, 3>;
+using mat4x4 = glsl::Matrix<float, 4, 4>;
+
+using mat2 = mat2x2;
+using mat3 = mat3x3;
+using mat4 = mat4x4;
 
 } // namespace glsl

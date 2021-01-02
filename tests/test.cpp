@@ -83,9 +83,22 @@ void test_vector_functions() {
     CHECK(length(ivec2(3, 4).xy), 5);
 }
 
+void test_matrix() {
+    CHECK(mat3(1)[0], vec3(1, 0, 0));
+    CHECK(mat3(1)[2], vec3(0, 0, 1));
+    CHECK(mat2(1, 2, 3, 4)[1], vec2(3, 4));
+    CHECK(mat2(1, vec2(2, 3), 4)[1], vec2(3, 4));
+    CHECK(mat2(1, 2, 3, 4).row(1), vec2(2, 4));
+    CHECK(-mat2(1), mat2(-1));
+    CHECK(mat2(1) + mat2(1), mat2(2, 0, 0, 2));
+    CHECK(mat2(1) + 1, mat2(2, 1, 1, 2));
+    CHECK(1 + mat2(1), mat2(2, 1, 1, 2));
+}
+
 int main() {
     test_vector_default();
     test_vector_functions();
+    test_matrix();
 
     return glsl::test::has_error ? 1 : 0;
 }
