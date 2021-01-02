@@ -93,6 +93,10 @@ void test_matrix() {
     CHECK(mat2(1) + mat2(1), mat2(2, 0, 0, 2));
     CHECK(mat2(1) + 1, mat2(2, 1, 1, 2));
     CHECK(1 + mat2(1), mat2(2, 1, 1, 2));
+
+    CHECK(determinant(mat2(1, 2, 3, 4)), -2.0);
+    CHECK(determinant(mat3(vec3(1), vec3(2), vec3(3))), 0.0);
+    CHECK(determinant(mat4(3)), 81.0);
 }
 
 int main() {

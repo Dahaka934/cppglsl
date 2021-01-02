@@ -19,6 +19,7 @@
 #include "vector.h"
 #include "vector_functions.h"
 #include "matrix.h"
+#include "matrix_functions.h"
 
 namespace glsl {
 
